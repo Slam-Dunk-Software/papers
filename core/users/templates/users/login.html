@@ -1,0 +1,10 @@
+<form
+  hx-post="{% url 'login' %}"
+  hx-target="#login-response"
+  hx-swap="innerHTML"
+>
+  <input type="text" name="username" placeholder="Username" required />
+  <input type="password" name="password" placeholder="Password" required />
+  <button type="submit">Log In</button>
+</form>
+<div id="login-response"></div>

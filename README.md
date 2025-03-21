@@ -11,28 +11,7 @@ brew install
 ```
 FIXME: Reference Brewfile
 
-`uv pip compile --output-file requirements.lock --group default`
 
-
-
-Django...
-```bash
-uv run django-admin startproject core
+```sh
+uv run python manage.py setup_db
 ```
-
-After that's done...
-```bash
-uv run python manage.py startapp usersu
-```
-
-Then within core/settings.py's INSTALLED_APPS:
-```python
-    "users",  # Add the users app
-```
-
-
-HTMX:
-```html
-<script src="https://unpkg.com/htmx.org@2.0.4"></script>
-```
-
