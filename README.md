@@ -19,3 +19,14 @@ uv pip install pytest hypothesis
 uv pip install pydantic
 uv pip install cattrs
 ```
+
+Django...
+```bash
+uv run django-admin startproject core
+```
+
+HTMX:
+```html
+<script src="https://unpkg.com/htmx.org@2.0.4"></script>
+```
+
