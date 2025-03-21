@@ -1,0 +1,16 @@
+[project]
+name = "papers"
+version = "0.1.0"
+description = "The source code for Slam Dunk Software's subscription service(s) which help developers learn new skills and keep the old skills sharp."
+authors = [{ name = "Nick Agliano", email = "nickagliano@gmail.com" }]
+license = { text = "MIT" }
+requires-python = ">=3.8"
+dependencies = [
+    "cattrs>=24.1.2",
+    "django>=4.2.20",
+    "hypothesis>=6.113.0",
+    "mypy>=1.14.1",
+    "pydantic>=2.10.6",
+    "pytest>=8.3.5",
+    "ruff>=0.11.1",
+]

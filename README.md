@@ -11,19 +11,25 @@ brew install
 ```
 FIXME: Reference Brewfile
 
-# TODO:
-```sh
-uv venv
-uv pip install django mypy ruff
-uv pip install pytest hypothesis
-uv pip install pydantic
-uv pip install cattrs
-```
+`uv pip compile --output-file requirements.lock --group default`
+
+
 
 Django...
 ```bash
 uv run django-admin startproject core
 ```
+
+After that's done...
+```bash
+uv run python manage.py startapp usersu
+```
+
+Then within core/settings.py's INSTALLED_APPS:
+```python
+    "users",  # Add the users app
+```
+
 
 HTMX:
 ```html

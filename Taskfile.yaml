@@ -5,14 +5,14 @@ tasks:
     desc: Install dependencies (from lock file)
     cmds:
       - uv venv
-      - uv pip sync
+      - uv pip sync pyproject.toml
     silent: true
 
   add:
     desc: Add a new dependency (and update lock file)
     cmds:
       - uv pip install {{.CLI_ARGS}}
-      - uv pip compile -o requirements.lock
+      - uv pip compile --output-file requirements.lock pyproject.toml
 
   lint:
     desc: Run Ruff for linting
