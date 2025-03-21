@@ -1,33 +1,27 @@
 version: "3"
 
 tasks:
-  setup:
+  install:
     desc: Install dependencies (from lock file)
     cmds:
       - uv venv
       - uv pip sync pyproject.toml
     silent: true
 
-  add:
-    desc: Add a new dependency (and update lock file)
-    cmds:
-      - uv pip install {{.CLI_ARGS}}
-      - uv pip compile --output-file requirements.lock pyproject.toml
-
   lint:
     desc: Run Ruff for linting
     cmds:
-      - uv pip run ruff check .
+      - uv run ruff check .
 
   typecheck:
     desc: Run Mypy for type checking
     cmds:
-      - uv pip run mypy .
+      - uv run mypy .
 
   test:
     desc: Run tests with pytest
     cmds:
-      - uv pip run pytest
+      - uv run pytest
 
   ci:
     desc: Run all CI checks
@@ -43,7 +37,15 @@ tasks:
       - psql -U postgres -c "DROP DATABASE IF EXISTS papers_development;"
       - echo "Creating the database..."
       - psql -U postgres -c "CREATE DATABASE papers_development;"
+      - echo "Migrating database..."
+      - uv run python core/manage.py migrate
       - echo "Running setup_db management command to seed the database..."
-      - uv run python manage.py setup_db
+      - uv run python core/manage.py setup_db
     env:
       DATABASE_URL: postgres://postgres:password@localhost:5432
+
+  serve:
+    desc: "Run the server"
+    cmds:
+      - echo "Running the development server"
+      - uv run python core/manage.py runserver

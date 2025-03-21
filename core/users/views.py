@@ -3,46 +3,60 @@ from django.contrib.auth.models import User
 from .models import UserCreate, UserLogin
 from pydantic import ValidationError
 from typing import Any
-from django.http import JsonResponse
+from django.http import JsonResponse, HttpResponse
 from django.shortcuts import render, redirect
-import json
 
+# FIXME: Redirect when user is already logged in
+# FIXME: Add password_reset logic
+# FIXME: Add OAuth?
 def signup_view(request: Any) -> JsonResponse:
     if request.method == "POST":
         try:
-            data = json.loads(request.body)
-            user_data = UserCreate(**data)
+            username = request.POST.get('username')
+            email = request.POST.get('email')
+            password = request.POST.get('password')
+
+            user_data = UserCreate(username=username, email=email, password=password)
 
             if User.objects.filter(username=user_data.username).exists():
-                return JsonResponse({"error": "Username already exists"}, status=400)
+                return render(request, 'users/errors.html', {'error': "Username already exists"})
+            
+            if User.objects.filter(email=user_data.email).exists():
+                return render(request, 'users/errors.html', {'error': "Email already exists"})
 
-            user = User.objects.create_user(username=user_data.username, password=user_data.password)
+            user = User.objects.create_user(username=user_data.username, email=user_data.email, password=user_data.password)
             login(request, user)
-            return JsonResponse({"message": "Signup successful!"})
+            response = HttpResponse("No content.")
+            response["HX-Redirect"] = "/"  # FIXME: Can I add a flash here? -- Signup successful!
+            return response
 
         except ValidationError as e:
-            return JsonResponse({"error": e.errors()}, status=400)
+            return render(request, 'users/errors.html', {'error': e.errors()})
 
     return render(request, "users/signup.html")
 
-
-def login_view(request: Any) -> JsonResponse:
+# FIXME: Add password_reset logic
+# FIXME: Add OAuth?
+def login_view(request):
     if request.method == "POST":
-        try:
-            data = json.loads(request.body)
-            login_data = UserLogin(**data)
+        username = request.POST.get('username')
+        password = request.POST.get('password')
 
-            user = authenticate(request, username=login_data.username, password=login_data.password)
-            if user is not None:
-                login(request, user)
-                return JsonResponse({"message": "Login successful!"})
-            return JsonResponse({"error": "Invalid credentials"}, status=400)
+        # Validate with pydantic
+        user_data = UserLogin(username=username, password=password)
 
-        except ValidationError as e:
-            return JsonResponse({"error": e.errors()}, status=400)
+        user = authenticate(request, username=user_data.username, password=user_data.password)
+        if user is not None:
+            login(request, user)
+            response = HttpResponse("No content.")
+            response["HX-Redirect"] = "/"  # FIXME: Can I add a flash here?
+            return response
+
+        return render(request, 'users/errors.html', {'error': "Invalid credentials"})
 
     return render(request, "users/login.html")
 
+# FIXME: Add OAuth?
 def logout_view(request):
     logout(request)
     return redirect("login")
