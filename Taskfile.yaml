@@ -1,0 +1,37 @@
+version: '3'
+
+tasks:
+  setup:
+    desc: Install dependencies (from lock file)
+    cmds:
+      - uv venv
+      - uv pip sync
+    silent: true
+
+  add:
+    desc: Add a new dependency (and update lock file)
+    cmds:
+      - uv pip install {{.CLI_ARGS}}
+      - uv pip compile -o requirements.lock
+
+  lint:
+    desc: Run Ruff for linting
+    cmds:
+      - uv pip run ruff check .
+
+  typecheck:
+    desc: Run Mypy for type checking
+    cmds:
+      - uv pip run mypy .
+
+  test:
+    desc: Run tests with pytest
+    cmds:
+      - uv pip run pytest
+
+  ci:
+    desc: Run all CI checks
+    cmds:
+      - task: lint
+      - task: typecheck
+      - task: test
