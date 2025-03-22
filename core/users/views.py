@@ -3,7 +3,7 @@ from django.contrib.auth.models import User
 from .models import UserCreate, UserLogin
 from pydantic import ValidationError
 from typing import Any
-from django.http import JsonResponse, HttpResponse
+from django.http import HttpResponse
 from django.shortcuts import render, redirect
 
 # FIXME: Redirect when user is already logged in
