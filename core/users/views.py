@@ -19,10 +19,10 @@ def signup_view(request: Any) -> JsonResponse:
             user_data = UserCreate(username=username, email=email, password=password)
 
             if User.objects.filter(username=user_data.username).exists():
-                return render(request, 'users/errors.html', {'error': "Username already exists"})
+                return render(request, 'errors.html', {'error': "Username already exists"})
             
             if User.objects.filter(email=user_data.email).exists():
-                return render(request, 'users/errors.html', {'error': "Email already exists"})
+                return render(request, 'errors.html', {'error': "Email already exists"})
 
             user = User.objects.create_user(username=user_data.username, email=user_data.email, password=user_data.password)
             login(request, user)
@@ -31,9 +31,9 @@ def signup_view(request: Any) -> JsonResponse:
             return response
 
         except ValidationError as e:
-            return render(request, 'users/errors.html', {'error': e.errors()})
+            return render(request, 'errors.html', {'error': e.errors()})
 
-    return render(request, "users/signup.html")
+    return render(request, "signup.html")
 
 # FIXME: Add password_reset logic
 # FIXME: Add OAuth?
@@ -52,9 +52,9 @@ def login_view(request):
             response["HX-Redirect"] = "/"  # FIXME: Can I add a flash here?
             return response
 
-        return render(request, 'users/errors.html', {'error': "Invalid credentials"})
+        return render(request, 'errors.html', {'error': "Invalid credentials"})
 
-    return render(request, "users/login.html")
+    return render(request, "login.html")
 
 # FIXME: Add OAuth?
 def logout_view(request):
