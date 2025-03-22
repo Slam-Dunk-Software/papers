@@ -9,7 +9,7 @@ from django.shortcuts import render, redirect
 # FIXME: Redirect when user is already logged in
 # FIXME: Add password_reset logic
 # FIXME: Add OAuth?
-def signup_view(request: Any) -> JsonResponse:
+def signup_view(request: Any) -> HttpResponse:
     if request.method == "POST":
         try:
             username = request.POST.get('username')
@@ -37,7 +37,7 @@ def signup_view(request: Any) -> JsonResponse:
 
 # FIXME: Add password_reset logic
 # FIXME: Add OAuth?
-def login_view(request):
+def login_view(request: Any) -> HttpResponse:
     if request.method == "POST":
         username = request.POST.get('username')
         password = request.POST.get('password')
@@ -57,6 +57,6 @@ def login_view(request):
     return render(request, "login.html")
 
 # FIXME: Add OAuth?
-def logout_view(request):
+def logout_view(request: Any) -> HttpResponse:
     logout(request)
     return redirect("login")

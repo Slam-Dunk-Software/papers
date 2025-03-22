@@ -6,12 +6,14 @@ authors = [{ name = "Nick Agliano", email = "nickagliano@gmail.com" }]
 license = { text = "MIT" }
 requires-python = ">=3.8"
 dependencies = [
-    "cattrs>=24.1.2",  # FIXME: This is actually unused right now, just because I 
+    "cattrs>=24.1.2", # FIXME: This is actually unused right now, just because I
     "django>=4.2.20",
+    "django-stubs>=5.1.3",
     "hypothesis>=6.113.0",
     "mypy>=1.14.1",
     "psycopg2>=2.9.10",
     "pydantic>=2.10.6",
     "pytest>=8.3.5",
     "ruff>=0.11.1",
+    "typing-extensions>=4.12.2",
 ]
