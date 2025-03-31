@@ -4,6 +4,8 @@
 # python stuff
 __pycache__
 *.pyc
+.mypy_cache
+.ruff_cache
 
 # overmind temp file
 .overmind.sock

@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+
+{% block content %}
+  <div class="max-w-3xl mx-auto p-6">
+    <h1 class="text-3xl font-bold mb-6">Subscribe to Papers</h1>
+    <p class="mb-8 text-gray-600">Get monthly research papers, essays, and insights delivered to your door.</p>
+
+    <form method="POST" class="space-y-8">
+      {% csrf_token %}
+
+      <!-- Personal Information -->
+      <div>
+        <h2 class="text-xl font-semibold mb-4">Personal Information</h2>
+        <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+          <div>
+            <label for="first_name" class="block text-gray-700">First Name</label>
+            <input id="first_name" type="text" name="first_name" required
+                   class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label for="middle_name" class="block text-gray-700">Middle Name (Optional)</label>
+            <input id="middle_name" type="text" name="middle_name"
+                   class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label for="last_name" class="block text-gray-700">Last Name</label>
+            <input id="last_name" type="text" name="last_name" required
+                   class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+          </div>
+        </div>
+      </div>
+
+      <!-- Address Information -->
+      <div>
+        <h2 class="text-xl font-semibold mb-4">Address Information</h2>
+        <div class="space-y-6">
+          <div>
+            <label for="address1" class="block text-gray-700">Address Line 1</label>
+            <input id="address1" type="text" name="address1" required
+                   class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div>
+            <label for="address2" class="block text-gray-700">Address Line 2 (Optional)</label>
+            <input id="address2" type="text" name="address2"
+                   class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+          </div>
+          <div class="grid grid-cols-1 md:grid-cols-3 gap-6">
+            <div>
+              <label for="city" class="block text-gray-700">City</label>
+              <input id="city" type="text" name="city" required
+                     class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+              <label for="state" class="block text-gray-700">State/Province</label>
+              <input id="state" type="text" name="state" required
+                     class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+            </div>
+            <div>
+              <label for="zip" class="block text-gray-700">Postal Code (ZIP)</label>
+              <input id="zip" type="text" name="zip" required
+                     class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Subscription Plan -->
+      <div>
+        <h2 class="text-xl font-semibold mb-4">Subscription Plan</h2>
+        <div>
+          <label for="plan" class="block text-gray-700">Choose a Plan</label>
+          <select id="plan" name="plan"
+                  class="w-full p-2 border border-gray-300 rounded focus:ring-2 focus:ring-blue-500">
+            <option value="monthly">Monthly - $20 / month (cancel at any time)</option>
+            <option value="yearly">Yearly - $200 / year <em>($40 discount!)</em></option>
+          </select>
+        </div>
+      </div>
+
+      <!-- Submit -->
+      <div class="mt-6">
+        <button id="checkout-button"
+                type="button"
+                class="w-full bg-blue-600 text-white py-3 rounded hover:bg-blue-800 transition">
+          Proceed to Payment
+        </button>
+      </div>
+    </form>
+  </div>
+
+  <!-- Stripe -->
+  <script src="https://js.stripe.com/v3/"></script>
+  <script>
+    var stripe = Stripe("{{ STRIPE_PUBLISHABLE_KEY }}"); // Load publishable key
+
+    document.getElementById("checkout-button").addEventListener("click", function () {
+        var selectedPlan = document.getElementById("plan").value;
+
+        fetch("/create-checkout-session/", {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "X-CSRFToken": "{{ csrf_token }}"
+            },
+            body: JSON.stringify({
+                plan: selectedPlan
+            })
+        })
+        .then(response => response.json())
+        .then(session => {
+            return stripe.redirectToCheckout({ sessionId: session.id });
+        })
+        .then(result => {
+            if (result.error) {
+                alert(result.error.message);
+            }
+        })
+        .catch(error => console.error("Error:", error));
+    });
+  </script>
+{% endblock %}

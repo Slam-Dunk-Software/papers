@@ -1,10 +1,15 @@
 # TODO:
 
 ## High priority:
-- [ ] download HTMX (store in repo? -- dont like using cdn)
+- [ ] fix HTMX and Tailwind for production (do not use cdn)
 
 ## Medium priority:
 - [ ]
 
 ## Low priority:
 - [ ]
+
+
+## Pages
+- Homepage (Landing Page)
+  - 
