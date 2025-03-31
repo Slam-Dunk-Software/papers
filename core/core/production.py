@@ -18,4 +18,3 @@ DATABASES = {
 
 # Use Whitenoise for static files
 # INSTALLED_APPS.insert(1, "whitenoise.runserver_nostatic")
-MIDDLEWARE.insert(1, "whitenoise.middleware.WhiteNoiseMiddleware")
