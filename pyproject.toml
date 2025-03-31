@@ -17,4 +17,5 @@ dependencies = [
     "ruff>=0.11.1",
     "stripe>=11.6.0",
     "typing-extensions>=4.12.2",
+    "whitenoise>=6.9.0",
 ]
