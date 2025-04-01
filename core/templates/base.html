@@ -16,7 +16,7 @@
   <nav class="bg-white shadow-md p-4">
     <div class="container mx-auto flex justify-between items-center">
       <!-- Logo Section -->
-      <div class="flex items-center">
+      <div class="flex items-center items-baseline">
         <a href="/" class="text-3xl font-bold text-blue-600">Papers</a>
         <a href="/" class="italic text-amber-500 ml-2">(the offline tech revolution)</a>
       </div>
@@ -27,6 +27,9 @@
           <span class="text-gray-700 mr-4">Welcome, {{ user.username }}!</span>
           <a href="{% url 'logout' %}" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
             Log out
+          </a>
+          <a href="{% url 'settings' %}" class="ml-2 px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+            Settings
           </a>
         {% else %}
           <a href="{% url 'login' %}" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
@@ -93,6 +96,5 @@
       mobileMenu.classList.toggle('hidden');
     });
   </script>
-
 </body>
 </html>

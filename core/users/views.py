@@ -1,6 +1,7 @@
 import stripe
 import json
 from django.contrib.auth import login, authenticate, logout
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
 from .models import UserCreate, UserLogin
 from pydantic import ValidationError
@@ -54,7 +55,6 @@ def signup_view(request: Any) -> HttpResponse:
     return render(request, "signup.html")
 
 # FIXME: Add password_reset logic
-# FIXME: Add OAuth?
 def login_view(request: Any) -> HttpResponse:
     if request.method == "POST":
         username = request.POST.get('username')
@@ -66,13 +66,16 @@ def login_view(request: Any) -> HttpResponse:
         user = authenticate(request, username=user_data.username, password=user_data.password)
         if user is not None:
             login(request, user)
+            next_url = request.POST.get("next", "/")  # Default to home if next isn't set
+            
             response = HttpResponse("No content.")
-            response["HX-Redirect"] = "/"  # FIXME: Can I add a flash here?
+            response["HX-Redirect"] = next_url  # Redirect correctly with HTMX
             return response
 
         return render(request, 'errors.html', {'error': "Invalid credentials"})
 
-    return render(request, "login.html")
+    return render(request, "login.html", {"next": request.GET.get("next", "/")})
+
 
 # FIXME: Add OAuth?
 def logout_view(request: Any) -> HttpResponse:
@@ -141,3 +144,11 @@ def create_checkout_session(request):
             return JsonResponse({'error': str(e)}, status=500)
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
+
+
+# FIXME: Make sure user is validated
+@login_required
+def settings_view(request: Any) -> HttpResponse:
+    # TODO: Add POST handling, for updating settings
+
+    return render(request, "settings.html")

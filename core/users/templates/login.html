@@ -9,6 +9,7 @@
       hx-target="#login-response"
     >
         {% csrf_token %}
+        <input type="hidden" name="next" value="{{ next }}">
         <input
             type="text" 
             name="username" 
