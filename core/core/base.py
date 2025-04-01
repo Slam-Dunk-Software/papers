@@ -117,6 +117,11 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 LOGIN_URL = "/users/login/"
 
-# Stripe
-STRIPE_PUBLISHABLE_KEY = 'pk_test_your_publishable_key'
-STRIPE_SECRET_KEY = 'sk_test_your_secret_key'
+# Load environment variables
+from dotenv import load_dotenv
+
+load_dotenv()  # This will load variables from a .env file if it exists
+
+# Stripe API Keys
+STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY", "pk_test_default")
+STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "sk_test_default")
