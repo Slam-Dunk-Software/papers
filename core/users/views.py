@@ -16,7 +16,6 @@ from django.http import JsonResponse
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 # FIXME: Redirect when user is already logged in
-# FIXME: Add password_reset logic
 # FIXME: Add OAuth?
 def signup_view(request: Any) -> HttpResponse:
     if request.method == "POST":
@@ -36,25 +35,16 @@ def signup_view(request: Any) -> HttpResponse:
             user = User.objects.create_user(username=user_data.username, email=user_data.email, password=user_data.password)
             login(request, user)
 
-            # FIXME: Actually use the flash message in the HTML!
-            messages.success(request, "Signup successful! Let's set up your subscription.")  # Flash message
+            messages.success(request, "Signup successful! Let's set up your subscription.")
             response = HttpResponse("No content.")
-            response["HX-Redirect"] = "/subscribe" # Redirect to subscription page
+            response["HX-Redirect"] = "/subscribe"  # NOTE: This is special HTMX syntax
             return response
-
-            # return redirect("subscribe")  
-
-            # FIXME: Use HTMX?
-            # response = HttpResponse("No content.")
-            # response["HX-Redirect"] = "/"  # FIXME: Can I add a flash here? -- Signup successful!
-            # return response
 
         except ValidationError as e:
             return render(request, 'errors.html', {'error': e.errors()})
 
     return render(request, "auth/signup.html")
 
-# FIXME: Add password_reset logic
 def login_view(request: Any) -> HttpResponse:
     if request.method == "POST":
         username = request.POST.get('username')
@@ -146,7 +136,6 @@ def create_checkout_session(request):
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
 
-# FIXME: Make sure user is validated
 @login_required
 def settings_view(request: Any) -> HttpResponse:
     # TODO: Add POST handling, for updating settings
