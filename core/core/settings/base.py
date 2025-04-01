@@ -52,7 +52,7 @@ ROOT_URLCONF = 'core.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        "DIRS": [BASE_DIR / "templates"],  # Look for templates at the project level
+        "DIRS": [BASE_DIR / ".." / "templates"],  # Look for templates at the project level
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
