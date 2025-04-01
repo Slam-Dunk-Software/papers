@@ -3,55 +3,96 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="icon" type="image/x-icon" href="{% static 'favicon.png' %}">
-    <title>{% block title %}Papers (by Slam Dunk Software){% endblock %}</title>
-    <script src="https://unpkg.com/htmx.org@2.0.4"></script>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <link rel="icon" type="image/x-icon" href="{% static 'favicon.png' %}">
+  <title>{% block title %}Papers (by Slam Dunk Software){% endblock %}</title>
+  <script src="https://unpkg.com/htmx.org@2.0.4"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 <body class="bg-gray-100 text-gray-900">
 
-    <!-- Navbar -->
-    <nav class="bg-white shadow-md p-4">
-        <div class="container mx-auto flex justify-between items-center">
-            <div>
-                <a href="/" class="text-3xl font-bold text-blue-600">Papers</a>
-                <a href="/" class="italic text-amber-500">(the offline tech revolution)</a>
-            </div>
-            <div>
-                {% if user.is_authenticated %}
-                    <span class="text-gray-700 mr-4">Welcome, {{ user.username }}!</span>
-                    <a href="{% url 'logout' %}" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
-                        Log out
-                    </a>
-                {% else %}
-                    <a href="{% url 'login' %}" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
-                        Log in
-                    </a>
-                    <a href="{% url 'signup' %}" class="ml-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
-                        Sign up
-                    </a>
-                {% endif %}
-            </div>
-        </div>
-    </nav>
+  <!-- Navbar -->
+  <nav class="bg-white shadow-md p-4">
+    <div class="container mx-auto flex justify-between items-center">
+      <!-- Logo Section -->
+      <div class="flex items-center">
+        <a href="/" class="text-3xl font-bold text-blue-600">Papers</a>
+        <a href="/" class="italic text-amber-500 ml-2">(the offline tech revolution)</a>
+      </div>
 
-    {% if messages %}
-        <div class="messages">
-            {% for message in messages %}
-                <div class="alert alert-{{ message.tags }} w-full bg-blue-200 p-2">
-                    {{ message }}
-                </div>
-            {% endfor %}
-        </div>
-    {% endif %}
+      <!-- Desktop Menu -->
+      <div class="hidden md:flex items-center">
+        {% if user.is_authenticated %}
+          <span class="text-gray-700 mr-4">Welcome, {{ user.username }}!</span>
+          <a href="{% url 'logout' %}" class="px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+            Log out
+          </a>
+        {% else %}
+          <a href="{% url 'login' %}" class="px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+            Log in
+          </a>
+          <a href="{% url 'signup' %}" class="ml-2 px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
+            Sign up
+          </a>
+        {% endif %}
+      </div>
 
-    <!-- Main Content -->
-    <div id="content" class="container mx-auto mt-8 p-6 bg-white shadow-lg rounded-lg">
-        {% block content %}
-        {% endblock %}
+      <!-- Mobile Hamburger -->
+      <div class="md:hidden">
+        <button id="nav-toggle" class="focus:outline-none">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" 
+                  d="M4 6h16M4 12h16M4 18h16"></path>
+          </svg>
+        </button>
+      </div>
     </div>
+
+    <!-- Mobile Menu (hidden by default) -->
+    <div id="mobile-menu" class="md:hidden hidden mt-4">
+      <div class="flex flex-col space-y-2">
+        {% if user.is_authenticated %}
+          <span class="text-gray-700">Welcome, {{ user.username }}!</span>
+          <a href="{% url 'logout' %}" class="block px-4 py-2 bg-red-500 text-white rounded-lg hover:bg-red-600">
+            Log out
+          </a>
+        {% else %}
+          <a href="{% url 'login' %}" class="block px-4 py-2 bg-blue-500 text-white rounded-lg hover:bg-blue-600">
+            Log in
+          </a>
+          <a href="{% url 'signup' %}" class="block px-4 py-2 bg-green-500 text-white rounded-lg hover:bg-green-600">
+            Sign up
+          </a>
+        {% endif %}
+      </div>
+    </div>
+  </nav>
+
+  {% if messages %}
+    <div class="messages">
+      {% for message in messages %}
+        <div class="alert alert-{{ message.tags }} w-full bg-blue-200 p-2">
+          {{ message }}
+        </div>
+      {% endfor %}
+    </div>
+  {% endif %}
+
+  <!-- Main Content -->
+  <div id="content" class="container mx-auto mt-8 p-6 bg-white shadow-lg rounded-lg">
+    {% block content %}
+    {% endblock %}
+  </div>
+
+  <!-- Simple Script for Toggling Mobile Menu -->
+  <script>
+    const navToggle = document.getElementById('nav-toggle');
+    const mobileMenu = document.getElementById('mobile-menu');
+    navToggle.addEventListener('click', function() {
+      mobileMenu.classList.toggle('hidden');
+    });
+  </script>
 
 </body>
 </html>
