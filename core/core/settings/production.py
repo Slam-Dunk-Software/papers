@@ -1,4 +1,4 @@
-from .base import *
+from .base import *  # noqa: F403
 import os
 
 DEBUG = False
@@ -15,6 +15,3 @@ DATABASES = {
         "PORT": os.getenv("DB_PORT", "5432"),
     }
 }
-
-# Use Whitenoise for static files
-# INSTALLED_APPS.insert(1, "whitenoise.runserver_nostatic")

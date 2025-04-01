@@ -1,6 +1,5 @@
 import stripe
 import json
-from django.contrib.auth.decorators import login_required
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.models import User
 from .models import UserCreate, UserLogin
@@ -92,8 +91,6 @@ def subscribe_view(request):
     
     return render(request, "subscribe.html")  # Show the subscription page
 
-
-
 @csrf_exempt
 def stripe_webhook(request):
     payload = request.body
@@ -103,14 +100,15 @@ def stripe_webhook(request):
         event = stripe.Webhook.construct_event(
             payload, sig_header, webhook_secret
         )
-    except ValueError as e:
+    except ValueError:
         return HttpResponse(status=400)
-    except stripe.error.SignatureVerificationError as e:
+    except stripe.error.SignatureVerificationError:
         return HttpResponse(status=400)
 
     # Handle the event
     if event['type'] == 'checkout.session.completed':
-        session = event['data']['object']
+        pass
+        # session = event['data']['object']
         # Fulfill the purchase: update user subscription, send email, etc.
     # Handle other event types if needed
 
