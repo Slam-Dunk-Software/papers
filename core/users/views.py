@@ -52,7 +52,7 @@ def signup_view(request: Any) -> HttpResponse:
         except ValidationError as e:
             return render(request, 'errors.html', {'error': e.errors()})
 
-    return render(request, "signup.html")
+    return render(request, "auth/signup.html")
 
 # FIXME: Add password_reset logic
 def login_view(request: Any) -> HttpResponse:
@@ -74,7 +74,7 @@ def login_view(request: Any) -> HttpResponse:
 
         return render(request, 'errors.html', {'error': "Invalid credentials"})
 
-    return render(request, "login.html", {"next": request.GET.get("next", "/")})
+    return render(request, "auth/login.html", {"next": request.GET.get("next", "/")})
 
 
 # FIXME: Add OAuth?

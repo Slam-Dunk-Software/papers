@@ -3,6 +3,8 @@
 ## High priority:
 - [ ] Have to fix the loading screen! When you submit the user account, it takes a second! Use HTMX loading (like in the reddit example) to give it modern feel while it works async.
 - [ ] Fix up HTMX and Tailwind for production (do not use cdn)!
+- [ ] Hook-up stripe
+- [ ] Hook-up email service (for password resets, etc.)
 
 ## Medium priority:
 - [ ]

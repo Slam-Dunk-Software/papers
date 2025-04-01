@@ -16,3 +16,5 @@ DATABASES: dict[str, dict[str, str | None]] = {
         'PORT': '5432',
     }
 }
+
+EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'

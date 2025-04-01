@@ -112,3 +112,6 @@ LOGIN_URL = "/users/login/"
 # Stripe API Keys
 STRIPE_PUBLISHABLE_KEY = os.getenv("STRIPE_PUBLISHABLE_KEY", "pk_test_default")
 STRIPE_SECRET_KEY = os.getenv("STRIPE_SECRET_KEY", "sk_test_default")
+
+# Token validity duration (in seconds) -- Django's default is 24 hrs -- set to 1 hour
+PASSWORD_RESET_TIMEOUT = 3600
