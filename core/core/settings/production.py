@@ -2,7 +2,7 @@ from .base import *  # noqa: F403
 import os
 
 DEBUG = False
-ALLOWED_HOSTS = [os.getenv("HOST_NAME")]
+ALLOWED_HOSTS: list[str | None] = [os.getenv("HOST_NAME")]
 
 # Production database (Heroku)
 DATABASES = {
