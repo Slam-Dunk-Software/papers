@@ -2,7 +2,7 @@ from .base import *
 import os
 
 DEBUG = False
-# ALLOWED_HOSTS = ["papers.slamdunk.software"]
+ALLOWED_HOSTS = [os.getenv("HOST_NAME")]
 
 # Production database (Heroku)
 DATABASES = {
