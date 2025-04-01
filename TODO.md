@@ -1,7 +1,8 @@
 # TODO:
 
 ## High priority:
-- [ ] fix HTMX and Tailwind for production (do not use cdn)
+- [ ] Have to fix the loading screen! When you submit the user account, it takes a second! Use HTMX loading (like in the reddit example) to give it modern feel while it works async.
+- [ ] Fix up HTMX and Tailwind for production (do not use cdn)!
 
 ## Medium priority:
 - [ ]
@@ -12,4 +13,5 @@
 
 ## Pages
 - Homepage (Landing Page)
-  - 
+- Subscription page
+- Subscription management page
