@@ -1,2 +1,2 @@
-web: cd core && gunicorn wsgi:application --log-file -
+web: cd core && gunicorn core.wsgi:application --log-file -
 # TODO: Add mailer, worker, other services, etc.
