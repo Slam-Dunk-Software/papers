@@ -17,12 +17,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from .views import home
-from users.views import subscribe_view, create_checkout_session
+from users.views import subscribe_view
 
 urlpatterns = [
     path('admin/', admin.site.urls),
     path("users/", include("users.urls")),
     path('subscribe/', subscribe_view, name="subscribe"),
-    path('create-checkout-session/', create_checkout_session, name='create_checkout_session'),
     path("", home, name="home"),
 ]
