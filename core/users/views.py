@@ -12,14 +12,10 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.http import JsonResponse
-from django.contrib.auth.views import PasswordResetView
-from django.core.mail import EmailMultiAlternatives
-from django.template.loader import render_to_string
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
 # FIXME: Redirect when user is already logged in
-# FIXME: Add OAuth?
 def signup_view(request: Any) -> HttpResponse:
     if request.method == "POST":
         try:
@@ -70,7 +66,6 @@ def login_view(request: Any) -> HttpResponse:
     return render(request, "auth/login.html", {"next": request.GET.get("next", "/")})
 
 
-# FIXME: Add OAuth?
 def logout_view(request: Any) -> HttpResponse:
     logout(request)
     return redirect("login")
@@ -87,6 +82,8 @@ def subscribe_view(request):
     
     return render(request, "subscribe.html")  # Show the subscription page
 
+# TODO: Implement!
+# TODO: Is this csrf_exempt actually necessary? If so, document.
 @csrf_exempt
 def stripe_webhook(request):
     payload = request.body
@@ -110,13 +107,14 @@ def stripe_webhook(request):
 
     return HttpResponse(status=200)
 
+# TODO: Implement!
 @csrf_exempt
 def create_checkout_session(request):
     if request.method == 'POST':
         data = json.loads(request.body)
         plan = data.get('plan', 'monthly')
 
-        # Replace these with your actual Stripe Price IDs
+        # Replace these with actual Stripe Price IDs
         price_id = 'price_monthly_id' if plan == 'monthly' else 'price_yearly_id'
 
         try:
@@ -138,7 +136,7 @@ def create_checkout_session(request):
 
     return JsonResponse({'error': 'Invalid request'}, status=400)
 
-
+# TODO: Implement!
 @login_required
 def settings_view(request: Any) -> HttpResponse:
     # TODO: Add POST handling, for updating settings

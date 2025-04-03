@@ -1,6 +1,6 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
-from .views import signup_view, login_view, logout_view, settings_view, CustomPasswordResetView
+from .views import signup_view, login_view, logout_view, settings_view
 
 urlpatterns = [
     # User auth and sessions management
