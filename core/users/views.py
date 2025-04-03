@@ -12,6 +12,9 @@ from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
 from django.conf import settings
 from django.http import JsonResponse
+from django.contrib.auth.views import PasswordResetView
+from django.core.mail import EmailMultiAlternatives
+from django.template.loader import render_to_string
 
 stripe.api_key = settings.STRIPE_SECRET_KEY
 
@@ -141,3 +144,19 @@ def settings_view(request: Any) -> HttpResponse:
     # TODO: Add POST handling, for updating settings
 
     return render(request, "settings.html")
+
+
+class CustomPasswordResetView(PasswordResetView):
+    """
+    Custom password reset view to ensure HTML emails are sent.
+    """
+    def send_mail(self, subject_template_name, email_template_name,
+                  context, from_email, to_email, html_email_template_name=None):
+        subject = render_to_string(subject_template_name, context).strip()
+        body_text = render_to_string(email_template_name, context)
+        body_html = render_to_string(html_email_template_name, context)
+
+        email_message = EmailMultiAlternatives(subject, body_text, from_email, [to_email])
+        if html_email_template_name:
+            email_message.attach_alternative(body_html, "text/html")
+        email_message.send()
