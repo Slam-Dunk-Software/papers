@@ -2,7 +2,7 @@
 name = "papers"
 version = "0.1.0"
 description = "The source code for Slam Dunk Software's subscription service(s) which help developers learn new skills and keep the old skills sharp."
-authors = [{ name = "Nick Agliano", email = "nickagliano@gmail.com" }]
+authors = [{ name = "Nick Agliano", email = "nick@slamdunk.software" }]
 license = { text = "MIT" }
 requires-python = "==3.13.2"
 dependencies = [
