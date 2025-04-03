@@ -16,6 +16,25 @@ DATABASES = {
     }
 }
 
+# Override default Django logging
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'level': 'ERROR',  # Only log errors in production
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': 'ERROR',
+            'propagate': True,
+        },
+    },
+}
+
 # Use SendGrid as the email backend in production
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 
