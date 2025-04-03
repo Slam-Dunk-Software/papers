@@ -144,19 +144,3 @@ def settings_view(request: Any) -> HttpResponse:
     # TODO: Add POST handling, for updating settings
 
     return render(request, "settings.html")
-
-
-class CustomPasswordResetView(PasswordResetView):
-    """
-    Custom password reset view to ensure HTML emails are sent.
-    """
-    def send_mail(self, subject_template_name, email_template_name,
-                  context, from_email, to_email, html_email_template_name=None):
-        subject = render_to_string(subject_template_name, context).strip()
-        body_text = render_to_string(email_template_name, context)
-        body_html = render_to_string(html_email_template_name, context)
-
-        email_message = EmailMultiAlternatives(subject, body_text, from_email, [to_email])
-        if html_email_template_name:
-            email_message.attach_alternative(body_html, "text/html")
-        email_message.send()
