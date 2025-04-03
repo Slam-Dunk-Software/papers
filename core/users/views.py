@@ -1,5 +1,6 @@
-import stripe
 import json
+import hmac
+import hashlib
 from django.contrib.auth import login, authenticate, logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.models import User
@@ -10,10 +11,7 @@ from django.http import HttpResponse
 from django.shortcuts import render, redirect
 from django.contrib import messages
 from django.views.decorators.csrf import csrf_exempt
-from django.conf import settings
 from django.http import JsonResponse
-
-stripe.api_key = settings.STRIPE_SECRET_KEY
 
 # FIXME: Redirect when user is already logged in
 def signup_view(request: Any) -> HttpResponse:
@@ -76,65 +74,11 @@ def subscribe_view(request):
     if not request.user.is_authenticated:
         return redirect("signup")
     
-    if request.method == "POST":
-        # Handle subscription logic here (e.g., create a Subscription object, process payment, etc.)
-        return HttpResponse("Subscription started!")  # Replace with actual subscription process
+    # NOTE:... this might be it. Just let people go to shopify with the buy button!
     
     return render(request, "subscribe.html")  # Show the subscription page
 
-# TODO: Implement!
-# TODO: Is this csrf_exempt actually necessary? If so, document.
-@csrf_exempt
-def stripe_webhook(request):
-    payload = request.body
-    sig_header = request.META.get('HTTP_STRIPE_SIGNATURE')
-    webhook_secret = settings.STRIPE_WEBHOOK_SECRET
-    try:
-        event = stripe.Webhook.construct_event(
-            payload, sig_header, webhook_secret
-        )
-    except ValueError:
-        return HttpResponse(status=400)
-    except stripe.error.SignatureVerificationError:
-        return HttpResponse(status=400)
 
-    # Handle the event
-    if event['type'] == 'checkout.session.completed':
-        pass
-        # session = event['data']['object']
-        # Fulfill the purchase: update user subscription, send email, etc.
-    # Handle other event types if needed
-
-    return HttpResponse(status=200)
-
-# TODO: Implement!
-@csrf_exempt
-def create_checkout_session(request):
-    if request.method == 'POST':
-        data = json.loads(request.body)
-        plan = data.get('plan', 'monthly')
-
-        # Replace these with actual Stripe Price IDs
-        price_id = 'price_monthly_id' if plan == 'monthly' else 'price_yearly_id'
-
-        try:
-            checkout_session = stripe.checkout.Session.create(
-                payment_method_types=['card'],
-                line_items=[
-                    {
-                        'price': price_id,
-                        'quantity': 1,
-                    },
-                ],
-                mode='subscription',
-                success_url=request.build_absolute_uri('/success/'),
-                cancel_url=request.build_absolute_uri('/cancel/'),
-            )
-            return JsonResponse({'id': checkout_session.id})
-        except Exception as e:
-            return JsonResponse({'error': str(e)}, status=500)
-
-    return JsonResponse({'error': 'Invalid request'}, status=400)
 
 # TODO: Implement!
 @login_required
@@ -142,3 +86,29 @@ def settings_view(request: Any) -> HttpResponse:
     # TODO: Add POST handling, for updating settings
 
     return render(request, "settings.html")
+
+# FIXME: Finish hooking this up!
+@csrf_exempt
+def shopify_webhook(request):
+    # Verify the HMAC signature
+    secret = 'your_shopify_secret'
+    hmac_header = request.headers.get('X-Shopify-Hmac-Sha256')
+    body = request.body
+    computed_hmac = hmac.new(secret.encode(), body, hashlib.sha256).hexdigest()
+
+    if not hmac.compare_digest(hmac_header, computed_hmac):
+        return JsonResponse({'error': 'Invalid signature'}, status=400)
+
+    # Parse the webhook data (assuming it's JSON)
+    data = json.loads(body)
+
+    # Process the data (e.g., update the user's subscription status)
+    user_id = data.get('user_id')  # Example, adjust based on your data
+    subscription_status = data.get('subscription_status')
+
+    # Example: Update subscription in your database
+    user = User.objects.get(id=user_id)
+    user.subscription_status = subscription_status
+    user.save()
+
+    return JsonResponse({'success': True})

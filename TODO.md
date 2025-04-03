@@ -2,10 +2,11 @@
 
 ## High priority:
 - [ ] Have to fix the loading screen! When you submit the user account, it takes a second! Use HTMX loading (like in the reddit example) to give it modern feel while it works async.
-- [ ] Fix ~~up HTMX~~ Tailwind in production (maybe use django-tailwind?)
-- [ ] Hook-up stripe
-- [ ] Make sure SendGrid is really working well
-  - [ ] Pricing..?
+- [ ] Fix Tailwind in production (maybe use django-tailwind?)
+- [ ] Hook-up shopify!
+  - [ ] Fill in the storefront
+  - [ ] Wire up the shopify webhooks so that we can listen to the changes to user subscriptions, purchases, etc.
+  - [ ] This stuff has to be *great* -- it's really the core of the app.
 - [ ] Add more models:
   - [ ] Model "subscription" on backend
   - [ ] "content", which can be academic paper, essay, blog post, etc.
@@ -19,6 +20,7 @@
   - [ ] "envelope" is a collection of "content"
   - [ ] We always need to have a queue of "envelopes" for our oldest, most reliable customers
     - [ ] Users which are newer, or have paused their subscription, can receive previous envelopes, as long as they haven't received that content before
+  - [ ] 
 
 ## Medium priority:
 - [ ] Add subscription pausing instead of cancelling(?)
