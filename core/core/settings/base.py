@@ -19,6 +19,9 @@ BASE_DIR = Path(__file__).resolve().parent.parent
  # No trailing slash auto-redirect (default is True, but Shopify doesn't like this)
 APPEND_SLASH = False 
 
+# Set TZ
+TIME_ZONE = 'America/New_York'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 
