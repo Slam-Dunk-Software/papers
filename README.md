@@ -1,6 +1,11 @@
 # Papers
 
-The source code for Slam Dunk Software's subscription service(s) which help developers learn new skills and keep the old skills sharp.
+<img src="https://github.com/user-attachments/assets/baf26b49-1a71-474e-9ba0-635c92fa7b53" width="500" height="300">
+
+---
+
+This is the source code for [Papers](https://get-papers.com), a service which mails research papers, essays, blog posts, and other media to your doorstep.
+
 
 ## Prerequisites
 ```sh
