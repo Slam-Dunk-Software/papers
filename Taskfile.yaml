@@ -8,6 +8,11 @@ tasks:
       - uv pip sync pyproject.toml
     silent: true
 
+  shell:
+    desc: Run the recommended shell
+    cmds:
+      - uv run python core/manage.py shell_plus
+
   lint:
     desc: Run Ruff for linting
     cmds:

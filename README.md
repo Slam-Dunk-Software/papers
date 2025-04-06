@@ -28,6 +28,24 @@ Example tasks:
 - `task typecheck` -- run typechecking ([mypy](https://github.com/python/mypy))
 - and many more... see [Taskfile.yaml](Taskfile.yaml) for all definitions
 
+## Shell
+Papers has the shell_plus with IPython enabled, so the recommended way to run is:
+
+```shell
+uv run python manage.py shell_plus
+```
+
+## Database
+Papers uses Postgres.
+
+- Generating migrations:
+  - For the core app:
+    - `uv run python manage.py makemigrations core`
+  - For the users app:
+    - `uv run python manage.py makemigrations users`
+- Running migrations:
+  - `uv run python manage.py migrate`
+
 
 ## Deploy
 

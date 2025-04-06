@@ -24,6 +24,7 @@
 
 ## Medium priority:
 - [ ] Add subscription pausing instead of cancelling(?)
+- [ ] Set up a cleanup cronjob for webhook logs
 
 ## Low priority:
 - [ ]
