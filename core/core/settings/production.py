@@ -45,5 +45,5 @@ EMAIL_USE_TLS = True  # Use TLS for secure communication
 EMAIL_HOST_USER = 'apikey'  # This is the default username for SendGrid's API
 EMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')  # SendGrid API Key (from Heroku environment variable)
 
-DEFAULT_FROM_EMAIL = '"Papers" <email@slamdunk.software>'
+DEFAULT_FROM_EMAIL = '"Papers" <email@get-papers.com>'
 
