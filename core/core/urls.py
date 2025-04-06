@@ -16,14 +16,22 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path, include
-from .views import home
-from users.views import subscribe_view, shopify_webhook
+from .views import (
+  home,
+  shopify_customer_create_webhook,shopify_customer_update_webhook, shopify_order_create_webhook,
+  shopify_fulfillment_create_webhook, shopify_fulfillment_update_webhook
+)
+from users.views import subscribe_view
 
 urlpatterns = [
+    path("", home, name="home"),  # Landing page
     path('admin/', admin.site.urls),
     path("users/", include("users.urls")),
     path('subscribe/', subscribe_view, name="subscribe"),
-    path("", home, name="home"),
     # Shopify
-    path('webhooks/orders/create/', shopify_webhook, name='shopify_webhook'),
+    path('webhooks/customers/create/', shopify_customer_create_webhook, name='shopify_customer_create_webhook'),
+    path('webhooks/customers/update/', shopify_customer_update_webhook, name='shopify_customer_update_webhook'),
+    path('webhooks/orders/create/', shopify_order_create_webhook, name='shopify_order_create_webhook'),
+    path('webhooks/fulfillment/create/', shopify_fulfillment_create_webhook, name='shopify_fulfillment_create_webhook'),
+    path('webhooks/fulfillment/update/', shopify_fulfillment_update_webhook, name='shopify_fulfillment_update_webhook'),
 ]

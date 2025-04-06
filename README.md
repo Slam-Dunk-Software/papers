@@ -50,4 +50,14 @@ Papers uses Postgres.
 ## Deploy
 
 - Deploys are managed in Heroku
-- 
+
+## Shopify Webhooks
+Papers uses Shopify.
+
+These are the webhooks we're supporting:
+- "Customer creation" -> `/webhooks/customers/create`
+- "Customer update" -> `/webhooks/customers/update`
+- "Order creation" -> `/webhooks/orders/create`
+- "Fulfillment Creation" -> `/webhooks/fulfillments/create`
+- "Fulfillment Update" -> `/webhooks/fulfillments/update`
+  
