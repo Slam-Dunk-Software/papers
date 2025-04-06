@@ -47,7 +47,7 @@ def verify_shopify_webhook(request: HttpRequest, secret: str) -> bool:
 
 
 def handle_shopify_webhook(request: HttpRequest) -> HttpResponse:
-    if not verify_shopify_webhook(request, settings.SHOPIFY_WEBHOOK_SECRET):
+    if not verify_shopify_webhook(request, settings.SHOPIFY_WEBHOOK_SIGNATURE):
         return HttpResponse(status=403)
 
     try:
