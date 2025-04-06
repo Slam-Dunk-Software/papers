@@ -29,9 +29,9 @@ urlpatterns = [
     path("users/", include("users.urls")),
     path('subscribe/', subscribe_view, name="subscribe"),
     # Shopify
-    path('webhooks/customers/create/', shopify_customer_create_webhook, name='shopify_customer_create_webhook'),
-    path('webhooks/customers/update/', shopify_customer_update_webhook, name='shopify_customer_update_webhook'),
-    path('webhooks/orders/create/', shopify_order_create_webhook, name='shopify_order_create_webhook'),
-    path('webhooks/fulfillment/create/', shopify_fulfillment_create_webhook, name='shopify_fulfillment_create_webhook'),
-    path('webhooks/fulfillment/update/', shopify_fulfillment_update_webhook, name='shopify_fulfillment_update_webhook'),
+    path('webhooks/customers/create', shopify_customer_create_webhook, name='shopify_customer_create_webhook'),
+    path('webhooks/customers/update', shopify_customer_update_webhook, name='shopify_customer_update_webhook'),
+    path('webhooks/orders/create', shopify_order_create_webhook, name='shopify_order_create_webhook'),
+    path('webhooks/fulfillment/create', shopify_fulfillment_create_webhook, name='shopify_fulfillment_create_webhook'),
+    path('webhooks/fulfillment/update', shopify_fulfillment_update_webhook, name='shopify_fulfillment_update_webhook'),
 ]

@@ -34,7 +34,6 @@ def shopify_fulfillment_create_webhook(request: HttpRequest) -> HttpResponse:
 def shopify_fulfillment_update_webhook(request: HttpRequest) -> HttpResponse:
     return handle_shopify_webhook(request)
 
-
 def verify_shopify_webhook(request: HttpRequest, secret: str) -> bool:
     hmac_header: Optional[str] = request.headers.get("X-Shopify-Hmac-Sha256")
     if not hmac_header:
