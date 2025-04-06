@@ -27,3 +27,9 @@ Example tasks:
 - `task lint` -- run linter ([ruff](https://github.com/astral-sh/ruff))
 - `task typecheck` -- run typechecking ([mypy](https://github.com/python/mypy))
 - and many more... see [Taskfile.yaml](Taskfile.yaml) for all definitions
+
+
+## Deploy
+
+- Deploys are managed in Heroku
+- 

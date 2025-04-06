@@ -47,3 +47,8 @@ EMAIL_HOST_PASSWORD = os.getenv('SENDGRID_API_KEY')  # SendGrid API Key (from He
 
 DEFAULT_FROM_EMAIL = '"Papers" <email@get-papers.com>'
 
+# Shopify
+SHOPIFY_WEBHOOK_SIGNATURE = os.getenv('SHOPIFY_WEBHOOK_SIGNATURE')
+
+# FIXME: Generate and use a different secret key in production!
+# SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
