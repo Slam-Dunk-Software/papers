@@ -26,7 +26,7 @@ tasks:
   test:
     desc: Run tests with pytest
     cmds:
-      - uv run pytest
+      - uv run pytest core
 
   ci:
     desc: Run all CI checks

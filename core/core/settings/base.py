@@ -111,3 +111,6 @@ LOGIN_URL = "/users/login/"
 
 # Token validity duration (in seconds) -- Django's default is 24 hrs -- set to 1 hour
 PASSWORD_RESET_TIMEOUT = 3600
+
+# Shopify
+SHOPIFY_WEBHOOK_SIGNATURE = os.getenv('SHOPIFY_WEBHOOK_SIGNATURE')

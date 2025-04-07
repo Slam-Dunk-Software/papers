@@ -105,7 +105,7 @@ def handle_customer_create(data: dict, shop_domain: str) -> HttpResponse:
         received_at=timezone.now(),
         payload={
             "message": "Debugging customer default address",
-            "raw_data": customer_data,
+            "raw_data": customer_data.model_dump(),
         },
     )
 

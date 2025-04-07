@@ -14,9 +14,6 @@ class CustomerAddressCreateData(BaseModel):
     name: Optional[str]
     default: bool
     
-    class Config:
-        from_attributes = True
-
 
 # This matches the Shopify customer data shape we get in the webhook
 class CustomerCreateData(BaseModel):
@@ -33,6 +30,3 @@ class CustomerCreateData(BaseModel):
     created_at: str
     updated_at: str
     default_address: CustomerAddressCreateData
-
-    class Config:
-        from_attributes = True  # This is necessary to allow pydantic models to work with ORM models if you need to use them.
