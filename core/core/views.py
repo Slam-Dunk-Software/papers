@@ -73,13 +73,21 @@ def handle_shopify_webhook(request: HttpRequest) -> HttpResponse:
     # Call the appropriate handler based on the topic
     if topic == "customers/create":
         return handle_customer_create(data, shop_domain)
-
-    # Add other topics as needed, for example:
-    # elif topic == "orders/create":
-    #     return handle_order_create(data, shop_domain)
+    elif topic == "customers/update":
+        return handle_customer_update(data, shop_domain)
+    # elif topic == "orders/create"
+        # return handle_order_create(data, shop_domain)
+    # elif topic == "fulfillment/create"
+        # return handle_fulfillment_create(data, shop_domain)
+    # elif topic == "fulfillment/update"
+        # return handle_fulfillment_update(data, shop_domain)
     
     # NOTE: We probably shouldn't reach this anymore, now that we have the
     #       individual topic handling
+    #       
+    #       In fact, we should probably log if we reach here, since that means
+    #       we're receiving a valid shopify webhook that we're not currently
+    #       set up to handle.
     return HttpResponse(status=200)
 
 def handle_customer_create(data: dict, shop_domain: str) -> HttpResponse:
@@ -148,8 +156,86 @@ def handle_customer_create(data: dict, shop_domain: str) -> HttpResponse:
             received_at=timezone.now(),
             payload={
                 "message": "Customer has no default_address",
-                "raw_data": customer_data,
+                "raw_data": customer_data.model_dump(),
             },
         )
+
+    return HttpResponse(status=200)
+
+
+def handle_customer_update(data: dict, shop_domain: str) -> HttpResponse:
+    try:
+        # Validate the incoming customer data
+        customer_data = CustomerCreateData(**data)
+    except ValidationError as e:
+        # Log validation error if any
+        WebhookLog.objects.create(
+            topic="customers/update - VALIDATION ERROR",
+            shop_domain=shop_domain,
+            received_at=timezone.now(),
+            payload={
+                "error": e.errors(),
+                "raw_data": data,
+            },
+        )
+        return HttpResponse(f"Invalid data: {e}", status=400)
+
+    try:
+        # Find and update the customer based on Shopify ID
+        customer = Customer.objects.get(shopify_id=customer_data.id)
+        
+        customer.first_name = customer_data.first_name or customer.first_name
+        customer.last_name = customer_data.last_name or customer.last_name
+        customer.note = customer_data.note or customer.note
+        customer.email = customer_data.email or customer.email
+        customer.phone = customer_data.phone or customer.phone
+        customer.state = customer_data.state or customer.state
+        customer.currency = customer_data.currency or customer.currency
+        customer.tax_exempt = customer_data.tax_exempt or customer.tax_exempt
+        customer.verified_email = customer_data.verified_email or customer.verified_email
+        customer.updated_at = parse_datetime(customer_data.updated_at)
+
+        customer.save()
+    except Customer.DoesNotExist:
+        # Log if the customer doesn't exist in the database
+        WebhookLog.objects.create(
+            topic="customers/update - CUSTOMER NOT FOUND",
+            shop_domain=shop_domain,
+            received_at=timezone.now(),
+            payload={"error": "Customer not found", "shopify_id": customer_data.id},
+        )
+        return HttpResponse(status=404)
+
+    # Handle the default address if it exists
+    if customer_data.default_address:
+        address_data = customer_data.default_address
+
+        try:
+            # Check if the address already exists and update or create it
+            address, created = CustomerAddress.objects.update_or_create(
+                shopify_id=address_data.id,
+                customer_id=customer.id,
+                customer_shopify_id=customer.shopify_id,
+                defaults={
+                    "address1": address_data.address1,
+                    "address2": address_data.address2 or "",
+                    "city": address_data.city,
+                    "province": address_data.province,
+                    "zip": address_data.zip,
+                    "country": address_data.country,
+                    "phone": address_data.phone or "",
+                    "name": address_data.name or "",
+                    "default": address_data.default,
+                }
+            )
+
+        except Exception:
+            # Log any errors while handling the address
+            WebhookLog.objects.create(
+                topic="customer address update - ERROR",
+                shop_domain=shop_domain,
+                received_at=timezone.now(),
+                payload={"message": "", "raw_data": address_data.model_dump()},
+            )
 
     return HttpResponse(status=200)
