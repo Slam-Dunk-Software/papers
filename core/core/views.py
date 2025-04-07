@@ -117,30 +117,41 @@ def handle_customer_create(data: dict, shop_domain: str) -> HttpResponse:
     if customer_data.default_address:
         address_data = customer_data.default_address
 
-    try:
-        CustomerAddress.objects.create(
-            id=address_data.id,
-            customer_id=customer.shopify_id,
-            address1=address_data.address1,
-            address2=address_data.address2 or "",
-            city=address_data.city,
-            province=address_data.province,
-            zip=address_data.zip,
-            country=address_data.country,
-            phone=address_data.phone or "",
-            name=address_data.name or "",
-            default=address_data.default,
-        )
-    except Exception as e:
+        try:
+            CustomerAddress.objects.create(
+                id=address_data.id,
+                customer_id=customer.shopify_id,
+                address1=address_data.address1,
+                address2=address_data.address2 or "",
+                city=address_data.city,
+                province=address_data.province,
+                zip=address_data.zip,
+                country=address_data.country,
+                phone=address_data.phone or "",
+                name=address_data.name or "",
+                default=address_data.default,
+            )
+        except Exception as e:
+            WebhookLog.objects.create(
+                topic="customer address create - VALIDATION ERROR",
+                shop_domain=shop_domain,
+                received_at=timezone.now(),
+                payload={
+                    "error": e,
+                    "raw_data": address_data,
+                },
+            )
+    else:
         WebhookLog.objects.create(
             topic="customer address create - VALIDATION ERROR",
             shop_domain=shop_domain,
             received_at=timezone.now(),
             payload={
                 "error": e,
-                "raw_data": address_data,
+                "raw_data": customer_data,
             },
         )
+    
 
 
     return HttpResponse(status=200)
