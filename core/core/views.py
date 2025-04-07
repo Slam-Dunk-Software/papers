@@ -141,7 +141,7 @@ def handle_customer_create(data: dict, shop_domain: str) -> HttpResponse:
             name=address_data.name or "",
             default=address_data.default,
         )
-    except Exception as e:
+    except Exception:
         WebhookLog.objects.create(
             topic="customer address create - NO DEFAULT ADDRESS",
             shop_domain=shop_domain,
