@@ -1,6 +1,7 @@
 # TODO:
 
 ## High priority:
+- [ ] See https://docs.djangoproject.com/en/5.1/howto/deployment/checklist/
 - [ ] Have to fix the loading screen! When you submit the user account, it takes a second! Use HTMX loading (like in the reddit example) to give it modern feel while it works async.
 - [ ] Fix Tailwind in production (maybe use django-tailwind?)
 - [ ] Hook-up shopify!

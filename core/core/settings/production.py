@@ -1,7 +1,7 @@
 from .base import *  # noqa: F403
 import os
 
-SECRET_KEY = os.getenv('DJANGO_SECRET_KEY')
+SECRET_KEY: str | None = os.getenv('DJANGO_SECRET_KEY')
 
 DEBUG = False
 ALLOWED_HOSTS: list[str | None] = [os.getenv("HOST_NAME")]
