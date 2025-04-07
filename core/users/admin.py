@@ -8,7 +8,6 @@ class WebhookLogAdmin(admin.ModelAdmin):
     list_filter = ('topic', 'received_at')
     readonly_fields = ('topic', 'shop_domain', 'received_at', 'payload')
 
-
 class CustomerAddressInline(admin.StackedInline):
     model = CustomerAddress
     extra = 0

@@ -3,7 +3,7 @@ from django.utils import timezone
 
 # Model to capture customer information, matching the Shopify webhook data shape
 class Customer(models.Model):
-    id = models.BigIntegerField(primary_key=True) # type: ignore
+    id = models.BigAutoField(primary_key=True) # type: ignore
     shopify_id = models.BigIntegerField(unique=True) # type: ignore
     email = models.EmailField(unique=True) # type: ignore
     first_name = models.CharField(max_length=100) # type: ignore
@@ -27,8 +27,9 @@ class Customer(models.Model):
 
 # Model to capture address information related to a Shopify customer
 class CustomerAddress(models.Model):
-    id = models.BigIntegerField(primary_key=True) # type: ignore
+    id = models.BigAutoField(primary_key=True) # type: ignore
     shopify_id = models.BigIntegerField(unique=True) # type: ignore
+    customer_shopify_id = models.BigIntegerField(unique=True) # type: ignore
     customer = models.ForeignKey(Customer, related_name="addresses", on_delete=models.CASCADE) # type: ignore
     address1 = models.CharField(max_length=255) # type: ignore
     address2 = models.CharField(max_length=255, null=True, blank=True) # type: ignore

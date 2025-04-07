@@ -3,7 +3,7 @@ from typing import Optional
 
 class CustomerAddressCreateData(BaseModel):
     id: int
-    shopify_id: int  # Shopify's customer ID (linking to Customer)
+    customer_id: int # NOTE: We're going to use this as shopify_id (to link to the customer's shopify_id)
     address1: str
     address2: Optional[str]
     city: str
@@ -20,8 +20,7 @@ class CustomerAddressCreateData(BaseModel):
 
 # This matches the Shopify customer data shape we get in the webhook
 class CustomerCreateData(BaseModel):
-    id: int
-    shopify_id: int
+    id: int # NOTE: We're going to use this as shopify_id
     first_name: Optional[str]
     last_name: Optional[str]
     email: Optional[str]
