@@ -32,7 +32,7 @@ class CustomerCreateData(BaseModel):
     verified_email: Optional[bool]
     created_at: str
     updated_at: str
-    default_address: Optional[CustomerAddressCreateData]
+    default_address: CustomerAddressCreateData
 
     class Config:
         from_attributes = True  # This is necessary to allow pydantic models to work with ORM models if you need to use them.

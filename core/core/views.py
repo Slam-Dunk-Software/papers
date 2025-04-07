@@ -62,7 +62,8 @@ def handle_shopify_webhook(request: HttpRequest) -> HttpResponse:
     topic = request.headers.get("X-Shopify-Topic", "unknown")
     shop_domain = request.headers.get("X-Shopify-Shop-Domain", "unknown")
 
-    # Log that we received an event from Shopify (useful for debugging)
+    # Log the whole payload and indicate that we received an event
+    # from Shopify (useful for debugging)
     WebhookLog.objects.create(
         topic=topic,
         shop_domain=shop_domain,
