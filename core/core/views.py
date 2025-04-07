@@ -58,9 +58,16 @@ def handle_shopify_webhook(request: HttpRequest) -> HttpResponse:
         data = json.loads(request.body)
     except json.JSONDecodeError:
         return HttpResponse(status=400)
-
+    
     topic = request.headers.get("X-Shopify-Topic", "unknown")
     shop_domain = request.headers.get("X-Shopify-Shop-Domain", "unknown")
+
+    # Log that we received an event from Shopify (useful for debugging)
+    WebhookLog.objects.create(
+        topic=topic,
+        shop_domain=shop_domain,
+        payload=data,
+    )
 
     # Call the appropriate handler based on the topic
     if topic == "customers/create":
@@ -70,12 +77,8 @@ def handle_shopify_webhook(request: HttpRequest) -> HttpResponse:
     # elif topic == "orders/create":
     #     return handle_order_create(data, shop_domain)
     
-    WebhookLog.objects.create(
-        topic=topic,
-        shop_domain=shop_domain,
-        payload=data,
-    )
-
+    # NOTE: We probably shouldn't reach this anymore, now that we have the
+    #       individual topic handling
     return HttpResponse(status=200)
 
 def handle_customer_create(data: dict, shop_domain: str) -> HttpResponse:
