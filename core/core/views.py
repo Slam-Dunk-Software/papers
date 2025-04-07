@@ -98,6 +98,16 @@ def handle_customer_create(data: dict, shop_domain: str) -> HttpResponse:
             },
         )
         return HttpResponse(f"Invalid data: {e}", status=400)
+    
+    WebhookLog.objects.create(
+        topic="customers/create - DEBUG",
+        shop_domain=shop_domain,
+        received_at=timezone.now(),
+        payload={
+            "message": "Debugging customer default address",
+            "raw_data": customer_data,
+        },
+    )
 
     customer = Customer.objects.create(
         shopify_id=customer_data.id,
