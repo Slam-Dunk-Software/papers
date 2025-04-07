@@ -6,6 +6,7 @@ from typing import Optional
 from django.conf import settings
 from django.http import HttpResponse, HttpRequest
 from django.shortcuts import render
+from django.utils import timezone
 from django.utils.dateparse import parse_datetime
 from django.views.decorators.csrf import csrf_exempt
 from .models import WebhookLog, Customer, CustomerAddress
@@ -63,7 +64,7 @@ def handle_shopify_webhook(request: HttpRequest) -> HttpResponse:
 
     # Call the appropriate handler based on the topic
     if topic == "customers/create":
-        return handle_customer_create(data)
+        return handle_customer_create(data, shop_domain)
 
     # Add other topics as needed, for example:
     # elif topic == "orders/create":
@@ -77,10 +78,21 @@ def handle_shopify_webhook(request: HttpRequest) -> HttpResponse:
 
     return HttpResponse(status=200)
 
-def handle_customer_create(data: dict) -> HttpResponse:
+def handle_customer_create(data: dict, shop_domain: str) -> HttpResponse:
     try:
         customer_data = CustomerCreateData(**data)
     except ValidationError as e:
+        # FIXME: I don't like this topic string being built this this--
+        #        make it more standardized / constantized?
+        WebhookLog.objects.create(
+            topic="customers/create - VALIDATION ERROR",
+            shop_domain=shop_domain,
+            received_at=timezone.now(),
+            payload={
+                "error": e.errors(),
+                "raw_data": data,
+            },
+        )
         return HttpResponse(f"Invalid data: {e}", status=400)
 
     customer = Customer.objects.create(
