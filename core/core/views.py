@@ -133,12 +133,12 @@ def handle_customer_create(data: dict, shop_domain: str) -> HttpResponse:
             )
         except Exception as e:
             WebhookLog.objects.create(
-                topic="customer address create - VALIDATION ERROR",
+                topic="customer address create - NO DEFAULT ADDRESS",
                 shop_domain=shop_domain,
                 received_at=timezone.now(),
                 payload={
-                    "error": e,
-                    "raw_data": address_data,
+                    "message": "Customer has no default_address",
+                    "raw_data": customer_data,
                 },
             )
     else:
